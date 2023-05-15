@@ -28,10 +28,10 @@ mod tests {
     #[test]
     fn new_hand_test() {
         let mut hand = Hand::new();
-        let card: Card = Card { rank: Rank::JACK, suit: Suit::HEARTS };
+        let card: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
         hand.add_card(card);
         assert_eq!(hand.cards_left(), 1);
-        assert_eq!(hand.cards[0].rank, Rank::JACK);
-        assert_eq!(hand.cards[0].suit, Suit::HEARTS);
+        assert_eq!(hand.cards[0].rank, Rank::Jack);
+        assert_eq!(hand.cards[0].suit, Suit::Hearts);
     }
 }

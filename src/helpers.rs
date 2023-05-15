@@ -2,10 +2,10 @@ use crate::card::Suit;
 
 pub fn get_left_bower_suit(trump_suit: Suit) -> Suit {
     match trump_suit {
-        Suit::HEARTS => Suit::DIAMONDS,
-        Suit::DIAMONDS => Suit::HEARTS,
-        Suit::SPADES => Suit::CLUBS,
-        Suit::CLUBS => Suit::SPADES,
+        Suit::Hearts => Suit::Diamonds,
+        Suit::Diamonds => Suit::Hearts,
+        Suit::Spades => Suit::Clubs,
+        Suit::Clubs => Suit::Spades,
     }
 }
 
@@ -15,9 +15,9 @@ mod tests {
 
     #[test]
     fn get_left_bower_test() {
-        assert_eq!(get_left_bower_suit(Suit::HEARTS), Suit::DIAMONDS);
-        assert_eq!(get_left_bower_suit(Suit::DIAMONDS), Suit::HEARTS);
-        assert_eq!(get_left_bower_suit(Suit::CLUBS), Suit::SPADES);
-        assert_eq!(get_left_bower_suit(Suit::SPADES), Suit::CLUBS);
+        assert_eq!(get_left_bower_suit(Suit::Hearts), Suit::Diamonds);
+        assert_eq!(get_left_bower_suit(Suit::Diamonds), Suit::Hearts);
+        assert_eq!(get_left_bower_suit(Suit::Clubs), Suit::Spades);
+        assert_eq!(get_left_bower_suit(Suit::Spades), Suit::Clubs);
     }
 }

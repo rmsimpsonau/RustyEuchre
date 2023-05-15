@@ -54,7 +54,7 @@ mod tests {
     #[test]
     fn add_card_to_hand_test() {
         let mut player = Player::new(1, TeamOne, RandomCardStrategy);
-        let card: Card = Card { rank: Rank::Jack, suit: Suit::HEARTS };
+        let card: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
         player.add_card_to_hand(card);
         assert_eq!(player.cards_left(), 1);
     }
@@ -70,16 +70,16 @@ mod tests {
     #[test]
     fn player_strategy_select_card_to_play_test() {
         let mut player1 = Player::new(1, TeamOne, RandomCardStrategy);
-        let card: Card = Card { rank: Rank::Queen, suit: Suit::SPADES };
+        let card: Card = Card { rank: Rank::Queen, suit: Suit::Spades };
         player1.add_card_to_hand(card);
-        let selected_card = player1.strategy.select_card_to_play(&mut player1.hand, Suit::SPADES, Some(Suit::HEARTS));
+        let selected_card = player1.strategy.select_card_to_play(&mut player1.hand, Suit::Spades, Some(Suit::Hearts));
         assert!(Some(selected_card).is_some());
     }
 
     #[test]
     fn player_clear_hand_test() {
         let mut player1 = Player::new(1, TeamOne, RandomCardStrategy);
-        let card: Card = Card { rank: Rank::Queen, suit: Suit::SPADES };
+        let card: Card = Card { rank: Rank::Queen, suit: Suit::Spades };
         player1.add_card_to_hand(card);
         player1.clear_hand();
         assert_eq!(player1.cards_left(), 0);
