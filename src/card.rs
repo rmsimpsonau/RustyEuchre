@@ -1,13 +1,13 @@
 use std::fmt;
 
-#[derive(Copy, Clone, PartialEq, Debug)]
+#[derive(Copy, Clone, PartialEq, Debug, Ord, PartialOrd, Eq)]
 pub enum Rank {
-    ACE,
-    KING,
-    QUEEN,
-    JACK,
+    NINE,
     TEN,
-    NINE
+    JACK,
+    QUEEN,
+    KING,
+    ACE
 }
 
 impl Rank {

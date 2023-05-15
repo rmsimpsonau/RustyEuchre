@@ -40,8 +40,16 @@ impl Deck {
         }
     }
 
-    pub(crate) fn top_card(&mut self) -> &Card {
+    pub fn add_card(&mut self, card: Card) {
+        self.cards.push(card);
+    }
+
+    pub fn top_card(&mut self) -> &Card {
         &self.cards[self.cards.len() - 1]
+    }
+
+    pub fn take_top_card(&mut self) -> Card {
+        self.cards[self.cards.len() - 1]
     }
  }
 
@@ -71,5 +79,24 @@ mod tests {
         let top_card: &Card = deck.top_card();
         assert_eq!(top_card.suit, card.suit);
         assert_eq!(top_card.rank, card.rank);
+    }
+
+    #[test]
+    fn take_top_card_test() {
+        let mut deck = Deck::new();
+        let card: Card = deck.cards[deck.cards.len() - 2];
+        deck.draw();
+        let top_card: Card = deck.take_top_card();
+        assert_eq!(top_card.suit, card.suit);
+        assert_eq!(top_card.rank, card.rank);
+        assert_eq!(deck.cards.len(), 23);
+    }
+
+    #[test]
+    fn add_card_test() {
+        let mut deck = Deck::new();
+        let card: Card = deck.draw();
+        deck.add_card(card);
+        assert_eq!(deck.cards.len(), 24);
     }
 }

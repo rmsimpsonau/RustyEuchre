@@ -39,7 +39,7 @@ Each `Hand` has 5 `Cards` to start and will decrease by 1 for each `Trick` playe
   - [x] Each `Player` is given the option to select trump, besides the suit of the top `Card`.
   - [x] If a `Player` selects trump:
     - [x] Skip to "Trump is designated"
-- If no `Player`
+- If no `Player` chooses trump, re-deal
 - [x] Trump is designated
 - The makers and defenders are designated
 - Maker can decide to "Go Alone"
@@ -86,12 +86,18 @@ If we want to know what the probability of a 9 of Hearts winning a `Trick` when 
 - If it is not led, there are 23/23 `Cards` that can beat it.
 - 
 
-### Which Card to Play
-#### Beat your teammates high card
-#### Play trump to draw out trump from other players hands
+### Which `Card` to Play
+#### Beat your teammates high `Card`
+#### Play trump to draw out trump from other `Players` `Hands`
+#### When possible, lead "Big"
+
+### Ordering Up Trump
+- Only order up trump if the dealer is you or your teammate
 
 ### Calling Trump
 #### Risky Calls
+##### Count on your teammate for at least 1 `Trick`
 #### Safe Calls
+##### "Call it" with 3 trump and an off `Ace`
 
 ### Going Alone
