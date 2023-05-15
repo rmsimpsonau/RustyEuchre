@@ -32,17 +32,17 @@ Each `Hand` has 5 `Cards` to start and will decrease by 1 for each `Trick` playe
 - [x] Determine which `Player` goes first
 - [x] Reveal the top `Card` off of the `Deck`
   - [x] Starting with the second `Player`, determine if the `Player` would like "order up" the `Card`.
-  - If a `Player` "orders up" this `Card`:
-    - The dealer takes the `Card` into their hand and discards a `Card`
+  - [x] If a `Player` "orders up" this `Card`:
+    - [x] The dealer takes the `Card` into their hand and discards a `Card`
     - [x] Skip to "Trump is designated"
 - [x] If no `Player` "orders up" this `Card`:
   - [x] Each `Player` is given the option to select trump, besides the suit of the top `Card`.
   - [x] If a `Player` selects trump:
     - [x] Skip to "Trump is designated"
-- If no `Player` chooses trump, re-deal
+- [x] If no `Player` chooses trump, re-deal
 - [x] Trump is designated
-- The makers and defenders are designated
-- Maker can decide to "Go Alone"
+- [x] The makers and defenders are designated
+- [x] Maker can decide to "Go Alone"
 - `Players` play `Cards` until no `Cards` are left in `Player` hands
   - The `Player` to the left of the Dealer starts
   - If a `Card` has already been played, the `Player` must follow suit

@@ -2,13 +2,15 @@ use rand::Rng;
 use crate::card::{Card, Suit};
 use crate::deck::Deck;
 use crate::player::Player;
+use crate::team::Team;
 
 pub struct Game {
     deck: Deck,
     players: [Player; 4],
     dealer_number: i8,
-    current_trump_suit: Option<Suit>,
-    maker_going_alone: bool
+    pub current_trump_suit: Option<Suit>,
+    maker_going_alone: bool,
+    making_team: Option<Team>
 }
 
 impl Game {
@@ -19,8 +21,20 @@ impl Game {
 
         println!("Dealer is Player {}", dealer_number);
 
-        let game = Game { deck: Deck::new(), players, dealer_number, current_trump_suit: None, maker_going_alone: false };
+        let game = Game { deck: Deck::new(), players, dealer_number, current_trump_suit: None, maker_going_alone: false, making_team: None };
         game
+    }
+
+    pub fn reset(&mut self) {
+        // Reset current trump suit
+        self.current_trump_suit = None;
+        // Clear Player's Hands
+        for player in &mut self.players {
+            player.clear_hand();
+        }
+        // Reset the Deck to include all cards again
+        self.deck.populate();
+        self.deck.shuffle();
     }
 
     pub fn cards_left(&mut self) -> usize {
@@ -50,6 +64,8 @@ impl Game {
         let dealer_index = (self.dealer_number - 1) as usize;
         let mut maker_player_index: Option<usize> = None;
 
+        /* TOP CARD IS SHOWING */
+
         // Starting with the player left of the dealer, ask if players want to order up top card
         println!("Card in front of dealer is {}{}", top_card.rank, top_card.suit);
         for i in player_left_of_dealer..player_left_of_dealer + self.players.len() {
@@ -65,6 +81,7 @@ impl Game {
                 println!("Pick it up!");
                 // Player decided to tell Dealer to pick it up. Remember trump that is set and the index of the player
                 self.current_trump_suit = Option::from(top_card.suit);
+                self.making_team = Some(player.team);
                 maker_player_index = Some(player_index);
                 break;
             } else {
@@ -83,7 +100,11 @@ impl Game {
             let maker = &mut self.players[maker_player_index.unwrap()];
             self.maker_going_alone = maker.strategy.go_alone(&maker.hand, top_card.suit);
             println!("Go alone?: {}", self.maker_going_alone.to_string());
+            println!("{} are the makers, {} are the defenders", self.making_team.unwrap(), Team::opposite_team(&self.making_team.unwrap()))
         } else {
+
+            /* TOP CARD FLIPPED OVER - ASK IF ANYBODY WANTS TO MAKE TRUMP */
+
             println!("Nobody asked the dealer to pick it up. Top card is flipped over");
             // Nobody orderd up trump yet so ask all players if they want to call trump
             for i in player_left_of_dealer..player_left_of_dealer + self.players.len() {
@@ -96,6 +117,7 @@ impl Game {
                 if trump_chosen.is_some() {
                     println!("chose {} as trump!", trump_chosen.unwrap());
                     self.current_trump_suit = Option::from(top_card.suit);
+                    self.making_team = Some(player.team);
                     break;
                 } else {
                     println!("Pass!");
@@ -117,13 +139,14 @@ impl Game {
 mod tests {
     use crate::game::{Game};
     use crate::{Player, RandomCardStrategy};
+    use crate::team::Team;
 
     fn create_players() -> [Player; 4] {
         [
-            Player::new(1, 1, RandomCardStrategy),
-            Player::new(2, 2, RandomCardStrategy),
-            Player::new(3, 1, RandomCardStrategy),
-            Player::new(4, 2, RandomCardStrategy),
+            Player::new(1, Team::TeamOne, RandomCardStrategy),
+            Player::new(2, Team::TeamTwo, RandomCardStrategy),
+            Player::new(3, Team::TeamOne, RandomCardStrategy),
+            Player::new(4, Team::TeamTwo, RandomCardStrategy),
         ]
     }
 
@@ -155,5 +178,15 @@ mod tests {
         assert!(game.current_trump_suit.is_none());
         game.decide_trump();
         assert!(game.current_trump_suit.is_some());
+    }
+
+    #[test]
+    fn redeal_test() {
+        let mut game = Game::new(create_players());
+        game.deal_cards();
+        game.decide_trump();
+        game.reset();
+        assert!(game.current_trump_suit.is_none());
+        assert_eq!(game.players[0].hand.cards_left(), 0)
     }
 }

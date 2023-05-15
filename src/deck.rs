@@ -26,7 +26,7 @@ impl Deck {
         self.cards.len()
     }
 
-    fn populate(&mut self) {
+    pub fn populate(&mut self) {
         self.cards.clear();
         for rank in Rank::iter() {
             let rank_clone = rank.clone();
