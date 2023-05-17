@@ -43,16 +43,16 @@ Each `Hand` has 5 `Cards` to start and will decrease by 1 for each `Trick` playe
 - [x] Trump is designated
 - [x] The makers and defenders are designated
 - [x] Maker can decide to "Go Alone"
-- `Players` play `Cards` until no `Cards` are left in `Player` hands
-  - The `Player` to the left of the Dealer starts
-  - If a `Card` has already been played, the `Player` must follow suit
-  - Otherwise, the `Player` can choose any `Card` they wish
-  - A `Trick's` winner is determined by the `Card` with the highest value
+- [x] `Players` play `Cards` until no `Cards` are left in `Player` hands
+  - [x] The `Player` to the left of the Dealer starts
+  - [x] If a `Card` has already been played, the `Player` must follow suit
+  - [x] Otherwise, the `Player` can choose any `Card` they wish
+  - [x] A `Trick's` winner is determined by the `Card` with the highest value
 - Gain points:
-  - If the makers win 3 or more `Tricks`, they earn 1 point
-  - If the makers win all 5 `Tricks`, they earn 2 points
-  - If the makers win all 5 `Tricks` and a member of the team opted to "go alone", they earn 4 points
-  - If the defenders win 3 or more `Tricks`, they earn 2 points
+  - [x] If the makers win 3 or more `Tricks`, they earn 1 point
+  - [x] If the makers win all 5 `Tricks`, they earn 2 points
+  - [x] If the makers win all 5 `Tricks` and a member of the team opted to "go alone", they earn 4 points
+  - [x] If the defenders win 3 or more `Tricks`, they earn 2 points
 - If a team has 10 points or more:
   - The game is over
 - If neither team has 10 points or more:

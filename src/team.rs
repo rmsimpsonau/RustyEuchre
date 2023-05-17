@@ -1,6 +1,6 @@
 use std::fmt;
 
-#[derive(Copy, Clone, PartialEq, Debug, Ord, PartialOrd, Eq)]
+#[derive(Copy, Clone, PartialEq, Debug, Ord, PartialOrd, Eq,  Hash)]
 pub enum Team {
     TeamOne,
     TeamTwo
@@ -28,6 +28,7 @@ impl fmt::Display for Team {
 }
 
 mod tests {
+    #[allow(unused_imports)]
     use crate::team::Team;
 
     #[test]
