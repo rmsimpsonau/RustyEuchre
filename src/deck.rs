@@ -19,7 +19,9 @@ impl Deck {
     }
 
     pub fn shuffle(&mut self) {
+        print!("Shuffling deck...");
         self.cards.shuffle(&mut thread_rng());
+        println!("Done!");
     }
 
     pub fn cards_left(&mut self) -> usize {
@@ -27,6 +29,7 @@ impl Deck {
     }
 
     pub fn populate(&mut self) {
+        print!("Populating deck...");
         self.cards.clear();
         for rank in Rank::iter() {
             let rank_clone = rank.clone();
@@ -38,6 +41,7 @@ impl Deck {
                 });
             }
         }
+        println!("Done!");
     }
 
     pub fn add_card(&mut self, card: Card) {

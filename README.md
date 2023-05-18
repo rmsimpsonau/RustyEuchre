@@ -53,12 +53,12 @@ Each `Hand` has 5 `Cards` to start and will decrease by 1 for each `Trick` playe
   - [x] If the makers win all 5 `Tricks`, they earn 2 points
   - [x] If the makers win all 5 `Tricks` and a member of the team opted to "go alone", they earn 4 points
   - [x] If the defenders win 3 or more `Tricks`, they earn 2 points
-- If a team has 10 points or more:
-  - The game is over
-- If neither team has 10 points or more:
-  - Shuffle the `Cards`
-  - The next `Player` is now the Dealer
-  - Return to the step: "Deal 5 random `Cards` to `Hand` of each `Player`"
+- [x] If a team has 10 points or more:
+  - [x] The game is over
+- [x] If neither team has 10 points or more:
+  - [x] Shuffle the `Cards`
+  - [x] The next `Player` is now the Dealer
+  - [x] Return to the step: "Deal 5 random `Cards` to `Hand` of each `Player`"
 
 
 
@@ -101,3 +101,34 @@ If we want to know what the probability of a 9 of Hearts winning a `Trick` when 
 ##### "Call it" with 3 trump and an off `Ace`
 
 ### Going Alone
+
+# Strategies Implemented
+## Decisions Each Strategy Must Implement
+
+### Ordering Up Trump
+- When the top `Card` is revealed in front of the dealer, each `Player` must decide whether or not to have the dealer 
+pick up that `Card` and assign trump to that `Card's` `Suit`.
+### Calling Trump
+- If nobody orders up trump when the top `Card` is revealed, each `Player` will then have to decide if they will choose
+a different `Suit` to be trump for this round. 
+### Going Alone
+- After ordering up trump or calling trump, the making `Player` must decide if they will go alone or not.
+### Discard `Card`
+- If the dealer is told to pick up the top `Card` from the deck, thereby ordering up trump, the dealer must decide which
+### `Card` To Play
+- When it is the `Player's` turn to play during a `Trick`, the `Player` must decide which `Card` to play, while following
+the rules of following suit.
+
+## Random Card Strategy
+### Ordering Up Trump
+- Randomly choose.
+### Calling Trump
+- Randomly choose to call trump or not. If 'Yes', then randomly choose a `Suit` that is not
+the same as the top `Card` that was passed on.
+### Going Alone
+- Randomly choose.
+### Discard `Card`
+- Randomly choose a `Card` that is NOT a trump `Card` if possible.
+### `Card` To Play
+- First, figure out if the `Player` will have to follow `Suit`. If so, play a random `Card`
+that matches the lead `Suit`. Otherwise, pick any random `Card` from the `Player's` `Hand`.

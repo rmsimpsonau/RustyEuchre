@@ -6,6 +6,7 @@ use crate::helpers::get_next_player_index;
 use crate::player::Player;
 use crate::team::Team;
 use crate::{TeamOne, TeamTwo};
+use crate::stat_tracker::StatTracker;
 use crate::team_scores::TeamScores;
 use crate::trick::Trick;
 
@@ -32,7 +33,7 @@ impl Game {
         game
     }
 
-    pub fn reset(&mut self) {
+    pub fn reset_cards(&mut self) {
         // Reset current trump suit
         self.current_trump_suit = None;
         // Clear Player's Hands
@@ -65,7 +66,7 @@ impl Game {
     }
 
     pub fn decide_trump(&mut self) {
-        // Get card from top fo the deck
+        // Get card from top of the deck
         let top_card = self.deck.take_top_card();
         let player_left_of_dealer = get_next_player_index(self.dealer_index as usize);
         let mut maker_player_index: Option<usize> = None;
@@ -160,7 +161,11 @@ impl Game {
         get_next_player_index(self.dealer_index as usize)
     }
 
-    pub fn play_hand(&mut self) {
+    pub fn pass_deal_to_left(&mut self) {
+        self.dealer_index = (self.dealer_index + 1) % 4;
+    }
+
+    pub fn play_hand(&mut self, stat_tracker: &mut StatTracker) {
         let mut starting_player_index: usize = self.get_player_index_left_of_dealer();
         let mut tricks: Vec<Trick> = vec![];
         let mut team_one_tricks_taken = 0;
@@ -169,7 +174,10 @@ impl Game {
         for _ in 0..5 {
             println!("==================================================");
             let trick: Trick = self.play_trick(starting_player_index);
-            starting_player_index = trick.highest_card_player_index.expect("Highest card player should be set");
+            let highest_card_player_index = trick.highest_card_player_index.expect("Highest card player should be set");
+            starting_player_index = highest_card_player_index;
+            // Track and print results
+            stat_tracker.trick_played(highest_card_player_index);
             trick.print_results();
             if trick.highest_card_player_index.unwrap() == 0 || trick.highest_card_player_index.unwrap() == 2 {
                 team_one_tricks_taken += 1;
@@ -224,6 +232,25 @@ impl Game {
         }
     }
 
+    pub fn game_over(&self) -> bool {
+        // Game is over once one team reaches 10 points
+        self.team_scores.team_one >= 10 || self.team_scores.team_two >= 10
+    }
+
+    pub fn winning_team_index(&self) -> usize {
+        // Winning team's index. TeamOne = 0, TeamTwo = 1
+        let mut team_index = 0;
+        if self.game_over() {
+            if self.team_scores.team_two > self.team_scores.team_one {
+                team_index = 1
+            }
+        } else {
+            panic!("The game is not over. Why are you requesting the winning team index?");
+        }
+
+        team_index
+    }
+
 
 }
 
@@ -232,6 +259,7 @@ impl Game {
 mod tests {
     use crate::game::{Game};
     use crate::{Player, RandomCardStrategy, TeamOne, TeamTwo};
+    use crate::stat_tracker::StatTracker;
     use crate::trick::Trick;
 
     fn create_players() -> [Player; 4] {
@@ -289,7 +317,7 @@ mod tests {
         let mut game = Game::new(create_players());
         game.deal_cards();
         game.decide_trump();
-        game.reset();
+        game.reset_cards();
         assert!(game.current_trump_suit.is_none());
         assert_eq!(game.players[0].hand.cards_left(), 0)
     }
@@ -314,7 +342,7 @@ mod tests {
         let mut game = Game::new(create_players());
         game.deal_cards();
         game.decide_trump();
-        game.play_hand();
+        game.play_hand(&mut StatTracker::new());
         assert_eq!(game.players[0].hand.cards_left(), 0);
         assert_eq!(game.players[1].hand.cards_left(), 0);
         assert_eq!(game.players[2].hand.cards_left(), 0);
@@ -347,5 +375,28 @@ mod tests {
         game.add_points_won(TeamTwo, 5);
         assert_eq!(game.team_scores.team_one, 5);
         assert_eq!(game.team_scores.team_two, 6);
+    }
+
+    #[test]
+    fn game_over_test() {
+        let mut game = Game::new(create_players());
+        game.making_team = Some(TeamOne);
+        game.maker_going_alone = true;
+        assert!(!game.game_over());
+        game.add_points_won(TeamOne, 5);
+        assert!(!game.game_over());
+        game.add_points_won(TeamOne, 5);
+        assert!(!game.game_over());
+        game.add_points_won(TeamOne, 5);
+        assert!(game.game_over());
+        assert_eq!(game.winning_team_index(), 0);
+    }
+
+    #[test]
+    fn pass_deal_to_left_test() {
+        let mut game = Game::new(create_players());
+        let starting_dealer_index = game.dealer_index;
+        game.pass_deal_to_left();
+        assert_eq!(game.dealer_index, (starting_dealer_index + 1) % 5);
     }
 }
