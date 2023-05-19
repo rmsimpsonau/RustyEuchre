@@ -1,4 +1,5 @@
 use crate::card::{Card, Rank, Suit};
+use crate::hand::Hand;
 
 pub fn get_left_bower_suit(trump_suit: Suit) -> Suit {
     match trump_suit {
@@ -46,11 +47,27 @@ pub fn get_card_value(card: Card, trump_suit: Suit, lead_card_suit: Suit) -> i32
     value
 }
 
+pub fn filter_cards_by_lead_suit(hand: &Hand, lead_suit: Suit) -> Vec<Card> {
+    // Filter the cards in the hand that have to be played based on the lead suit
+    hand.cards
+        .iter()
+        .filter(|&card| card_matches_lead_suit(card, lead_suit))
+        .cloned()
+        .collect()
+}
+
+pub fn card_matches_lead_suit(card: &Card, lead_suit: Suit) -> bool {
+    lead_suit == card.suit
+}
+
 mod tests {
     #[allow(unused_imports)]
     use crate::card::{Card, Rank, Suit};
+    use crate::hand::Hand;
     #[allow(unused_imports)]
     use crate::helpers::{get_card_value, get_left_bower_suit, get_next_player_index};
+    use crate::helpers::{card_matches_lead_suit, filter_cards_by_lead_suit};
+    use crate::RandomCardStrategy;
 
     #[test]
     fn get_left_bower_test() {
@@ -95,5 +112,64 @@ mod tests {
         assert_eq!(get_card_value(Card { rank: Rank::Nine, suit: Suit::Clubs }, Suit::Hearts, Suit::Diamonds), 0);
 
         assert_eq!(get_card_value(Card { rank: Rank::Jack, suit: Suit::Spades }, Suit::Diamonds, Suit::Spades), 3);
+    }
+
+    #[test]
+    fn filter_cards_by_lead_suit_one_match_test() {
+        let mut hand = Hand::new(); // Create a test Hand instance
+        let card1: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
+        let card2: Card = Card { rank: Rank::Nine, suit: Suit::Diamonds };
+        hand.add_card(card1);
+        hand.add_card(card2);
+
+        let matching_cards: Vec<Card> = filter_cards_by_lead_suit(&hand, Suit::Hearts);
+
+        assert_eq!(matching_cards.len(), 1);
+        assert_eq!(matching_cards[0].suit, card1.suit);
+        assert_eq!(matching_cards[0].rank, card1.rank);
+    }
+
+    #[test]
+    fn filter_cards_by_lead_suit_two_match_test() {
+        let mut hand = Hand::new(); // Create a test Hand instance
+        let card1: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
+        let card2: Card = Card { rank: Rank::Nine, suit: Suit::Hearts };
+        hand.add_card(card1);
+        hand.add_card(card2);
+
+        let matching_cards: Vec<Card> = filter_cards_by_lead_suit(&hand, Suit::Hearts);
+
+        assert_eq!(matching_cards.len(), 2);
+        assert_eq!(matching_cards[0].suit, card1.suit);
+        assert_eq!(matching_cards[0].rank, card1.rank);
+        assert_eq!(matching_cards[1].suit, card2.suit);
+        assert_eq!(matching_cards[1].rank, card2.rank);
+    }
+
+    #[test]
+    fn card_matches_lead_suit_test() {
+        let mut hand = Hand::new(); // Create a test Hand instance
+        let card1: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
+        let card2: Card = Card { rank: Rank::Nine, suit: Suit::Diamonds };
+        hand.add_card(card1);
+        hand.add_card(card2);
+
+        assert!(card_matches_lead_suit(&card1, Suit::Hearts));
+        assert!(!card_matches_lead_suit(&card2, Suit::Hearts));
+    }
+
+    #[test]
+    fn filter_cards_by_lead_suit_no_matches_test() {
+        let mut hand = Hand::new(); // Create a test Hand instance
+        let card1: Card = Card { rank: Rank::Jack, suit: Suit::Hearts };
+        let card2: Card = Card { rank: Rank::Nine, suit: Suit::Diamonds };
+        let card3: Card = Card { rank: Rank::Nine, suit: Suit::Spades };
+        hand.add_card(card1);
+        hand.add_card(card2);
+        hand.add_card(card3);
+
+        let matching_cards: Vec<Card> = filter_cards_by_lead_suit(&hand, Suit::Clubs);
+
+        assert_eq!(matching_cards.len(), 0);
     }
 }

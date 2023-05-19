@@ -132,3 +132,17 @@ the same as the top `Card` that was passed on.
 ### `Card` To Play
 - First, figure out if the `Player` will have to follow `Suit`. If so, play a random `Card`
 that matches the lead `Suit`. Otherwise, pick any random `Card` from the `Player's` `Hand`.
+
+## Best Card Strategy
+### Ordering Up Trump
+- If the `Player` has or will receive the highest trump card after the `Card` is picked up, then the `Player`
+will order up the `Card`.
+### Calling Trump
+- If the `Player` has the highest trump card, then the `Player` will call trump.
+### Going Alone
+- If the `Player` has the highest trump card, then the `Player` will go alone.
+### Discard `Card`
+- Randomly choose a `Card` that is NOT a trump `Card` if possible.
+### `Card` To Play
+- First, figure out if the `Player` will have to follow `Suit`. If so, play the highest `Card`
+that matches the lead `Suit`. Otherwise, pick the highest Card` from the `Player's` `Hand`.

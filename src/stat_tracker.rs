@@ -27,8 +27,8 @@ impl StatTracker {
 
     pub(crate) fn print_game_stats(&self) {
         println!("Total tricks played {}", self.total_tricks_played as usize);
-        println!("||||||||||||| Game Stats |||||||||||||||");
-        println!("| Player   | Tricks Won  |  Games Won  |");
+        println!("||||||||||||| Game Stats ||||||||||||||||");
+        println!("| Player   | Tricks Won   |  Games Won  |");
         println!("| Player 1 | {:>4} ({:>3.0}%) | {:>4} ({:>3.0}%) |", self.player_tricks_won[0],
                  self.player_tricks_won[0] as f32 / self.total_tricks_played as f32 * 100.0, self.team_games_won[0],
                  self.team_games_won[0] as f32 / self.games_played as f32 * 100.0);
@@ -44,7 +44,7 @@ impl StatTracker {
 
 
 
-        println!("||||||||||||||||||||||||||||||||||||||||");
+        println!("|||||||||||||||||||||||||||||||||||||||||");
     }
 }
 
@@ -60,7 +60,7 @@ mod tests {
     }
 
     #[test]
-    fn game_won_test() {
+    fn game_played_test() {
         let mut stat_tracker = StatTracker::new();
         stat_tracker.game_played(1);
         assert_eq!(stat_tracker.team_games_won, [0, 1]);
